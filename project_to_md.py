@@ -102,11 +102,11 @@ def build_tree_structure(root_dir, ignore_patterns, prefix=''):
         connector = '└── ' if is_last else '├── '
         
         if os.path.isdir(entry_path):
-dir_size = get_directory_size(entry_path)
-            size_str = format_file_size(dir_size)
-            items.append(f"{prefix}{connector}{entry}/ ({size_str})\n")
-            extension = '    ' if is_last else '│   '
-            items.append(build_tree_structure(entry_path, ignore_patterns, prefix + extension))
+            dir_size = get_directory_size(entry_path)
+                        size_str = format_file_size(dir_size)
+                        items.append(f"{prefix}{connector}{entry}/ ({size_str})\n")
+                        extension = '    ' if is_last else '│   '
+                        items.append(build_tree_structure(entry_path, ignore_patterns, prefix + extension))
         else:
             try:
                 file_size = os.path.getsize(entry_path)
