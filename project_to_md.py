@@ -3,13 +3,16 @@ import argparse
 import fnmatch
 
 def format_file_size(size_bytes):
-    """Форматирует размер файла в читаемый формат"""
-    for unit in ['B', 'KB', 'MB', 'GB']:
-        if size_bytes < 1024:
-            return f"{size_bytes:.1f} {unit}" if size_bytes >= 100 else f"{int(size_bytes)} {unit}"
-        if size_bytes >= 1024:
+    """Format file size in human-readable format, similar to du -h"""
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+        if unit == 'B':
+            if size_bytes < 1024:
+                return f"{int(round(size_bytes))} {unit}"
+        else:
+            if size_bytes < 1024:
+                return f"{int(round(size_bytes))} {unit}"
             size_bytes /= 1024
-    return f"{size_bytes:.1f} TB"
+    return f"{int(round(size_bytes))} TB"
 
 def read_ignore_patterns(ignore_file_path):
     """Читает и парсит файл .ignore"""
