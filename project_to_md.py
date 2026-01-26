@@ -11,6 +11,21 @@ def format_file_size(size_bytes):
             size_bytes /= 1024
     return f"{int(round(size_bytes))} PB"
 
+def get_directory_size(path):
+    """Calculate total size of directory including all files"""
+    total_size = 0
+    try:
+        for dirpath, dirnames, filenames in os.walk(path):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                try:
+                    total_size += os.path.getsize(filepath)
+                except OSError:
+                    pass
+    except (OSError, PermissionError):
+        pass
+    return total_size
+
 def read_ignore_patterns(ignore_file_path):
     """Читает и парсит файл .ignore"""
     patterns = []
@@ -87,7 +102,9 @@ def build_tree_structure(root_dir, ignore_patterns, prefix=''):
         connector = '└── ' if is_last else '├── '
         
         if os.path.isdir(entry_path):
-            items.append(f"{prefix}{connector}{entry}/\n")
+dir_size = get_directory_size(entry_path)
+            size_str = format_file_size(dir_size)
+            items.append(f"{prefix}{connector}{entry}/ ({size_str})\n")
             extension = '    ' if is_last else '│   '
             items.append(build_tree_structure(entry_path, ignore_patterns, prefix + extension))
         else:
