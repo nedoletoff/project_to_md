@@ -5,14 +5,11 @@ import fnmatch
 def format_file_size(size_bytes):
     """Format file size in human-readable format, similar to du -h"""
     for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
-        if unit == 'B':
-            if size_bytes < 1024:
-                return f"{int(round(size_bytes))} {unit}"
+        if size_bytes < 1024:
+            return f"{int(round(size_bytes))} {unit}"
         else:
-            if size_bytes < 1024:
-                return f"{int(round(size_bytes))} {unit}"
             size_bytes /= 1024
-    return f"{int(round(size_bytes))} TB"
+    return f"{int(round(size_bytes))} PB"
 
 def read_ignore_patterns(ignore_file_path):
     """Читает и парсит файл .ignore"""
